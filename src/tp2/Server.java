@@ -147,9 +147,18 @@ public class Server implements Serializable {
 	
 	public boolean repOK(){
 		if(exceptions == null || bans == null)
+			return false;	
+		if(!exceptions.repOk() || !bans.repOk())
 			return false;
-		
-		return false;
+		for (int i = 0; i < bans.size; i++) { 
+			if(exceptions.contains(bans.get(i).getIp())){ //las listas no deben tener elementos en comun
+					return false;
+			}
+			if(bans.get(i).getExpires() < lastUpdate) //ningún IP banneado puede tener un tiempo de expiración menor a lastupdate
+				return false;
+			
+		}	
+		return true;
 	}
 	
 	

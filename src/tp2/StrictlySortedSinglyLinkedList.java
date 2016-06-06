@@ -120,7 +120,30 @@ public class StrictlySortedSinglyLinkedList implements Serializable{
     	return size;
     }    
   	
-    
+
+    public boolean repOk(){
+    	if(header == null)
+    		return false;
+    	if (header.element != null)
+            return false;
+    	Node current = header.next;	
+    	Node currentNext = header.next.next;	
+    	Set<IP> visited = new HashSet<IP>();
+    	while(current!=null){ 
+    		if(current.element == null)
+    			return false;
+			if(!visited.add(current.element.getIp())) // la lista no debe tener elementos repetidos
+				return false;
+			if(currentNext != null){
+				if(currentNext.element == null)
+					return false;
+				if(currentNext.element.getExpires() > current.element.getExpires()) //chequea si estan ordenados
+					return false;
+			}
+			current = current.next;
+       	} 
+    	return true;
+    }
     
 
     /**
