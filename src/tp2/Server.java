@@ -4,11 +4,11 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import korat.finitization.IClassDomain;
 import korat.finitization.IFinitization;
 import korat.finitization.IIntSet;
-import korat.finitization.ILongSet;
 import korat.finitization.IObjSet;
 import korat.finitization.impl.FinitizationFactory;
 
@@ -146,18 +146,18 @@ public class Server implements Serializable {
 	
 	
 	public boolean repOK(){
+		Set<IPBan> bansItems = new HashSet<IPBan>();
+		Set<IP> exceptionsItems = new HashSet<IP>();
 		if(exceptions == null || bans == null)
 			return false;	
-		if(!exceptions.repOk() || !bans.repOk())
+		if(!exceptions.repOk(exceptionsItems) || !bans.repOk(bansItems))
 			return false;
-		for (int i = 0; i < bans.size; i++) { 
-			if(exceptions.contains(bans.get(i).getIp())){ //las listas no deben tener elementos en comun
-					return false;
-			}
-			if(bans.get(i).getExpires() < lastUpdate) //ningún IP banneado puede tener un tiempo de expiración menor a lastupdate
+		for (IPBan ip : bansItems) {
+			if(exceptionsItems.contains(ip.getIp()))
 				return false;
-			
-		}	
+			if(ip.getExpires() <= lastUpdate) //ningún IP banneado puede tener un tiempo de expiración menor a lastupdate
+				return false;		
+		}
 		return true;
 	}
 	

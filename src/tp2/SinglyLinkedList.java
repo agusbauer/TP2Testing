@@ -76,37 +76,26 @@ public class SinglyLinkedList implements Serializable{
        	} 
     	return true;
     }
-    
-    public int itemCount(IP value){
-    	if(!contains(value))
-    		return 0;
-    	int counter  = 0;
-    	Entry current = header.next.next;	
-    	Entry prev = header.next;
-    	while(current!=null){
-			if(current.element.equals(value)){
-				counter++;
-			}
-			current = current.next;
-			prev = prev.next;
-       	} 
-    	return counter;
-    }
 
-    public boolean repOk(){
+    public boolean repOk(Set<IP> itemsSet){
     	if(header == null)
     		return false;
     	if (header.element != null)
             return false;
     	Entry current = header.next;	
     	Set<IP> visited = new HashSet<IP>();
+    	int itemsCount = 0;
     	while(current!=null){ 
     		if(current.element == null)
     			return false;
+    		itemsCount++;
 			if(!visited.add(current.element)) // la lista no debe tener elementos repetidos
 				return false;
+			itemsSet.add(current.element);
 			current = current.next;
        	} 
+    	if(itemsCount != size)
+    		return false;
     	return true;
     }
 
