@@ -12,7 +12,6 @@ import java.util.Set;
 public class StrictlySortedSinglyLinkedList implements Serializable{
 	
     public  static final long serialVersionUID = 1; 
-
     public Node header;
     public int size = 0;
    
@@ -65,6 +64,7 @@ public class StrictlySortedSinglyLinkedList implements Serializable{
     			if(current.element.getIp().equals(value)){
     				//remove ip
     				prev.next = current.next;
+    				size--; // le faltaba restar el size, se lo agregamos
     				break;
     			}
     			current = current.next;
@@ -106,7 +106,7 @@ public class StrictlySortedSinglyLinkedList implements Serializable{
     	Node current = header.next;
     	int i = 0;
     	while(current!=null && i< index){
-    		current = current .next;
+    		current = current.next;
     		i++;
     	}
     	if(current!=null){
@@ -135,8 +135,7 @@ public class StrictlySortedSinglyLinkedList implements Serializable{
     			return false;
     		if(current.element.getIp() == null)
     			return false;
-    		itemsCount++;
-    		
+    		itemsCount++; 		
 			if(!visited.add(current.element.getIp())) // la lista no debe tener elementos repetidos
 				return false;
 			itemsSet.add(current.element);

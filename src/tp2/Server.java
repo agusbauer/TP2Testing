@@ -118,7 +118,7 @@ public class Server implements Serializable {
 	/** Removes the IP from the bans list
 	*/
 	public boolean removeBan(IP ban) {
-		//no repeated
+		//no repeat
 		if (!bans.containsIP(ban)) {
 			return false;
 		}
@@ -134,14 +134,11 @@ public class Server implements Serializable {
 	 * @return
 	 */
 	public void update() {
-
-		lastUpdate = time.getCurrentTime();
-		
+		lastUpdate = time.getCurrentTime();		
 		IPBan b;
-		while(bans.getSize()>0 && (b=bans.get(0)).getExpires().compareTo(lastUpdate) <= 0){
+		while(bans.getSize()>0 && (b=bans.get(0)).getExpires().compareTo(lastUpdate) <= 0){ //no chequeaba que la lista sea vacia
 			bans.removeFromIP(b.ip);
-		}
-		
+		}		
 	}
 	
 	
