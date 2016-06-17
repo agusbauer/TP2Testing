@@ -63,11 +63,12 @@ public class SinglyLinkedList implements Serializable{
     	if(!contains(value))
     		return false;
     	
-    	Entry current = header.next.next;	
-    	Entry prev = header.next;
+    	Entry current = header.next;	
+    	Entry prev = header;
     	while(current!=null){
     			if(current.element.equals(value)){
     				//remove ip
+    				size--;
     				prev.next = current.next;
     				break;
     			}

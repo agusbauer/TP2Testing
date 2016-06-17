@@ -11,6 +11,7 @@ import korat.finitization.IFinitization;
 import korat.finitization.IIntSet;
 import korat.finitization.IObjSet;
 import korat.finitization.impl.FinitizationFactory;
+import randoop.CheckRep;
 
 /**
  * This class represents a server which accepts connections and manages bans an exceptions
@@ -57,6 +58,7 @@ public class Server implements Serializable {
 		this.exceptions = new SinglyLinkedList();
 		this.bans = new StrictlySortedSinglyLinkedList();
 		this.time = new RealTime();
+		this.lastUpdate = time.getCurrentTime();;
 	}
 	
 	/**
@@ -65,7 +67,7 @@ public class Server implements Serializable {
 	 * It returns true iff the connection was accepted.
 	 */
 	public boolean connect(IP ip) {
-		if(bans.containsIP(ip))
+		if(ip == null || bans.containsIP(ip))
 			return false;
 		else
 			return true;
@@ -77,7 +79,7 @@ public class Server implements Serializable {
 	 * It returns true iff the exception was successfully added.
 	 */
 	public boolean addException(IP ip) {
-		if (exceptions.contains(ip)) {
+		if (ip == null ||  exceptions.contains(ip)) {
 			return false;
 		}
 		else{
@@ -100,6 +102,9 @@ public class Server implements Serializable {
 	 * returns true iff the ban was successfully added
 	 */
 	public boolean addBan(IP ban) {
+		//not null
+		if (ban == null)
+			return false;
 		//no repeated
 		if (bans.containsIP(ban)) {
 			return false;
@@ -112,6 +117,10 @@ public class Server implements Serializable {
 		//create new banned IP with the currentTime plus the expirationTime constant.
 		IPBan ipban = new IPBan(ban, time.getCurrentTime()+expirationTime);
 		bans.add(ipban);
+		
+		
+				
+				
 		return true;
 	}
 	
@@ -141,7 +150,7 @@ public class Server implements Serializable {
 		}		
 	}
 	
-	
+	@CheckRep
 	public boolean repOK(){
 		Set<IPBan> bansItems = new HashSet<IPBan>();
 		Set<IP> exceptionsItems = new HashSet<IP>();
